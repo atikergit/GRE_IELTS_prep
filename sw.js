@@ -1,0 +1,4 @@
+const C='brittanto-v4';const F=["./", "index.html", "app.js", "brand.js", "calc.js", "data-guides.js", "data-lessons.js", "data-questions.js", "data-vocab.js", "data-vocab2.js", "data-ets.js", "data-kmf.js", "data-cam.js", "manifest.json", "icon-192.png", "icon-512.png"];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(F)));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||e.request.headers.has('range'))return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.status===200){const cp=res.clone();caches.open(C).then(c=>c.put(e.request,cp));}return res;}).catch(()=>caches.match('index.html'))));});
